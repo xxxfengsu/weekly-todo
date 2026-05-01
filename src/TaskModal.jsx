@@ -10,8 +10,7 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
   const textRef = useRef(null);
 
   useEffect(() => {
-    textRef.current?.focus();
-    if (!isAdd) textRef.current?.select();
+    if (isAdd) textRef.current?.focus();
   }, [isAdd]);
 
   useEffect(() => {
