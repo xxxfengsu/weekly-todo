@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { uid } from './utils';
 import { supabase } from './supabase';
 
@@ -7,8 +7,10 @@ const EMPTY_WEEK = { 0: [], 1: [], 2: [], 3: [], 4: [] };
 export function useTodos(roomId, weekId) {
   const [weekData, setWeekData] = useState(EMPTY_WEEK);
   const [loading, setLoading] = useState(true);
+  const weekDataRef = useRef(weekData);
+  weekDataRef.current = weekData;
 
-  // Load initial data from Supabase
+  // Load initial data
   useEffect(() => {
     if (!roomId || !weekId) return;
     setLoading(true);
@@ -18,7 +20,8 @@ export function useTodos(roomId, weekId) {
       .eq('room_id', roomId)
       .eq('week_id', weekId)
       .maybeSingle()
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) console.error('Load error:', error);
         if (data?.data) setWeekData(data.data);
         setLoading(false);
       });
@@ -44,19 +47,21 @@ export function useTodos(roomId, weekId) {
   }, [roomId, weekId]);
 
   const save = useCallback((data) => {
-    supabase.from('todos').upsert(
-      { room_id: roomId, week_id: weekId, data, updated_at: new Date().toISOString() },
-      { onConflict: 'room_id,week_id' }
-    );
+    supabase
+      .from('todos')
+      .upsert(
+        { room_id: roomId, week_id: weekId, data, updated_at: new Date().toISOString() },
+        { onConflict: 'room_id,week_id' }
+      )
+      .then(({ error }) => { if (error) console.error('Save error:', error); });
   }, [roomId, weekId]);
 
+  // Use a ref so update always reads latest data — avoids calling save inside a state updater
   const update = useCallback((updater) => {
-    setWeekData(prev => {
-      const next = { ...EMPTY_WEEK, ...prev };
-      updater(next);
-      save(next);
-      return next;
-    });
+    const next = { ...EMPTY_WEEK, ...weekDataRef.current };
+    updater(next);
+    setWeekData(next);
+    save(next);
   }, [save]);
 
   const addTask = useCallback((dayIdx, text, note = '') => {
