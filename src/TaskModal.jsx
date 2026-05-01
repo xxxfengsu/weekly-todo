@@ -2,16 +2,52 @@ import { useState, useEffect, useRef } from 'react';
 import styles from './TaskModal.module.css';
 import { DAYS } from './utils';
 
+const URL_RE = /https?:\/\/[^\s]+/g;
+
+function LinkifiedText({ text }) {
+  const parts = [];
+  let last = 0;
+  let match;
+  URL_RE.lastIndex = 0;
+  while ((match = URL_RE.exec(text)) !== null) {
+    if (match.index > last) parts.push({ type: 'text', val: text.slice(last, match.index) });
+    parts.push({ type: 'link', val: match[0] });
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push({ type: 'text', val: text.slice(last) });
+
+  return (
+    <>
+      {parts.map((p, i) =>
+        p.type === 'link' ? (
+          <a key={i} href={p.val} target="_blank" rel="noopener noreferrer"
+            className={styles.noteLink} onClick={e => e.stopPropagation()}>
+            {p.val}
+          </a>
+        ) : (
+          <span key={i}>{p.val}</span>
+        )
+      )}
+    </>
+  );
+}
+
 // task=null → add mode, task=object → edit mode
 export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onToggle, onDelete }) {
   const isAdd = task === null;
   const [text, setText] = useState(task?.text ?? '');
   const [note, setNote] = useState(task?.note ?? '');
+  const [noteEditing, setNoteEditing] = useState(isAdd);
   const textRef = useRef(null);
+  const noteAreaRef = useRef(null);
 
   useEffect(() => {
     if (isAdd) textRef.current?.focus();
   }, [isAdd]);
+
+  useEffect(() => {
+    if (noteEditing) noteAreaRef.current?.focus();
+  }, [noteEditing]);
 
   useEffect(() => {
     function onKey(e) { if (e.key === 'Escape') onClose(); }
@@ -22,11 +58,8 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
   function handleSave() {
     const t = text.trim();
     if (!t) return;
-    if (isAdd) {
-      onAdd(dayIdx, t, note);
-    } else {
-      onSave(dayIdx, task.id, t, note);
-    }
+    if (isAdd) onAdd(dayIdx, t, note);
+    else onSave(dayIdx, task.id, t, note);
     onClose();
   }
 
@@ -56,13 +89,25 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
           />
 
           <label className={styles.label}>Notes</label>
-          <textarea
-            className={styles.noteInput}
-            value={note}
-            onChange={e => setNote(e.target.value)}
-            placeholder="Add notes…"
-            rows={5}
-          />
+
+          {noteEditing ? (
+            <textarea
+              ref={noteAreaRef}
+              className={styles.noteInput}
+              value={note}
+              onChange={e => setNote(e.target.value)}
+              onBlur={() => setNoteEditing(false)}
+              placeholder="Add notes…"
+              rows={5}
+            />
+          ) : (
+            <div
+              className={`${styles.noteDisplay} ${!note ? styles.notePlaceholder : ''}`}
+              onClick={() => setNoteEditing(true)}
+            >
+              {note ? <LinkifiedText text={note} /> : 'Click to add notes…'}
+            </div>
+          )}
         </div>
 
         <div className={styles.footer}>
