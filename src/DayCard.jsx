@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import styles from './DayCard.module.css';
-import { fmtDate, isToday, DAYS } from './utils';
+import { isToday, DAYS } from './utils';
 
 export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete }) {
   const [text, setText] = useState('');
@@ -25,12 +25,11 @@ export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete
           <span className={styles.dayName}>{DAYS[dayIdx]}</span>
           {today && <span className={styles.badge}>今天</span>}
         </div>
-        <div className={styles.meta}>
-          <span className={styles.dateStr}>{fmtDate(date)}</span>
-          {tasks.length > 0 && (
+        {tasks.length > 0 && (
+          <div className={styles.meta}>
             <span className={styles.progress}>{done}/{tasks.length}</span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <ul className={styles.list}>

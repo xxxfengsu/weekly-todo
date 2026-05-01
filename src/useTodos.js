@@ -48,5 +48,11 @@ export function useTodos(weekId) {
     });
   }, [update]);
 
-  return { weekData, addTask, toggleTask, deleteTask };
+  const clearWeek = useCallback(() => {
+    update(week => {
+      for (let i = 0; i < 5; i++) week[i] = [];
+    });
+  }, [update]);
+
+  return { weekData, addTask, toggleTask, deleteTask, clearWeek };
 }

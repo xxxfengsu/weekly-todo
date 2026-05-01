@@ -24,6 +24,30 @@
   font-size: .9rem;
 }
 
+.clearBtn {
+  margin-top: 12px;
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: transparent;
+  color: #94a3b8;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+
+.clearBtn:hover {
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
+.clearBtn.confirm {
+  border-color: #f43f5e;
+  background: #f43f5e;
+  color: #fff;
+}
+
 /* ── Board ─────────────────────────── */
 /* Desktop: 5 columns */
 .board {

@@ -1,21 +1,36 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import DayCard from './DayCard';
-import { getWeekDates, getWeekId, fmtDate } from './utils';
+import { getWeekDates, getWeekId } from './utils';
 import { useTodos } from './useTodos';
 import styles from './App.module.css';
 
 export default function App() {
   const dates = useMemo(() => getWeekDates(), []);
   const weekId = useMemo(() => getWeekId(dates[0]), [dates]);
-  const { weekData, addTask, toggleTask, deleteTask } = useTodos(weekId);
+  const { weekData, addTask, toggleTask, deleteTask, clearWeek } = useTodos(weekId);
+  const [confirming, setConfirming] = useState(false);
+
+  function handleClear() {
+    if (!confirming) {
+      setConfirming(true);
+      setTimeout(() => setConfirming(false), 3000);
+      return;
+    }
+    clearWeek();
+    setConfirming(false);
+  }
 
   return (
     <div className={styles.app}>
       <header className={styles.header}>
         <h1 className={styles.title}>每周计划</h1>
-        <p className={styles.sub}>
-          {weekId} &nbsp;·&nbsp; {fmtDate(dates[0])} – {fmtDate(dates[4])}
-        </p>
+        <p className={styles.sub}>{weekId}</p>
+        <button
+          className={`${styles.clearBtn} ${confirming ? styles.confirm : ''}`}
+          onClick={handleClear}
+        >
+          {confirming ? '再次点击确认清除' : '清除本周任务'}
+        </button>
       </header>
 
       <main className={styles.board}>
