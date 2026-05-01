@@ -20,7 +20,8 @@
   background: #fff;
   border-radius: 18px;
   width: 100%;
-  max-width: 480px;
+  max-width: 680px;
+  max-height: 90vh;
   box-shadow: 0 20px 60px rgba(0,0,0,.18);
   display: flex;
   flex-direction: column;
@@ -70,10 +71,12 @@
 
 /* ── Body ─────────────────────────── */
 .body {
-  padding: 20px 20px 16px;
+  padding: 20px 24px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .label {
@@ -101,17 +104,18 @@
 }
 
 .noteInput {
-  font-size: .875rem;
+  font-size: .9rem;
   color: #1e293b;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 12px 14px;
   outline: none;
   font-family: inherit;
   resize: vertical;
-  line-height: 1.6;
+  line-height: 1.7;
   transition: border-color .15s;
-  min-height: 100px;
+  min-height: 220px;
+  flex: 1;
 }
 
 .noteInput:focus {
