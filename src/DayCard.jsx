@@ -1,9 +1,21 @@
 import styles from './DayCard.module.css';
 import { isToday, DAYS } from './utils';
 
+const isTouch = window.matchMedia('(hover: none)').matches;
+
 export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpenDetail, onOpenAdd }) {
   const today = isToday(date);
   const done = tasks.filter(t => t.done).length;
+
+  function makeDetailHandlers(task) {
+    if (isTouch) {
+      return { onClick: () => onOpenDetail(task, dayIdx) };
+    }
+    return {
+      onDoubleClick: () => onOpenDetail(task, dayIdx),
+      title: 'Double-click to view details',
+    };
+  }
 
   return (
     <div className={`${styles.card} ${today ? styles.today : ''}`}>
@@ -27,12 +39,11 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
           <li
             key={task.id}
             className={`${styles.item} ${task.done ? styles.done : ''}`}
-            onDoubleClick={() => onOpenDetail(task, dayIdx)}
-            title="Double-click to view details"
+            {...makeDetailHandlers(task)}
           >
             <button
               className={`${styles.check} ${task.done ? styles.checked : ''}`}
-              onClick={() => onToggle(dayIdx, task.id)}
+              onClick={e => { e.stopPropagation(); onToggle(dayIdx, task.id); }}
               aria-label={task.done ? 'Mark incomplete' : 'Mark complete'}
             >
               {task.done && (
@@ -47,7 +58,7 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
             </span>
             <button
               className={styles.del}
-              onClick={() => onDelete(dayIdx, task.id)}
+              onClick={e => { e.stopPropagation(); onDelete(dayIdx, task.id); }}
               aria-label="Delete"
             >×</button>
           </li>
