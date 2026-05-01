@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
-  DndContext, DragOverlay, closestCenter,
+  DndContext, DragOverlay, pointerWithin,
   PointerSensor, TouchSensor, useSensor, useSensors,
 } from '@dnd-kit/core';
 import DayCard from './DayCard';
@@ -88,7 +88,7 @@ export default function App() {
       ) : (
         <DndContext
           sensors={sensors}
-          collisionDetection={closestCenter}
+          collisionDetection={pointerWithin}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >

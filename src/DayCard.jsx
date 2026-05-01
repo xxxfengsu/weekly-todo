@@ -8,10 +8,14 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
   const today = !isUnscheduled && date && isToday(date);
   const done = tasks.filter(t => t.done).length;
 
+  // Apply droppable to the entire card so the hit area is always large
   const { setNodeRef, isOver } = useDroppable({ id: dayIdx });
 
   return (
-    <div className={`${styles.card} ${today ? styles.today : ''} ${isUnscheduled ? styles.unscheduled : ''}`}>
+    <div
+      ref={setNodeRef}
+      className={`${styles.card} ${today ? styles.today : ''} ${isUnscheduled ? styles.unscheduled : ''} ${isOver ? styles.cardOver : ''}`}
+    >
       <div className={styles.header}>
         <div className={styles.titleRow}>
           <span className={styles.dayName}>{DAYS[dayIdx]}</span>
@@ -24,10 +28,7 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
         )}
       </div>
 
-      <ul
-        ref={setNodeRef}
-        className={`${styles.list} ${isOver ? styles.dragOver : ''}`}
-      >
+      <ul className={`${styles.list} ${isOver ? styles.dragOver : ''}`}>
         {tasks.length === 0 && (
           <li className={styles.empty}>
             {isOver ? 'Drop here' : 'No tasks yet'}
