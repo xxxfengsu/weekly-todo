@@ -1,0 +1,232 @@
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07), 0 6px 20px rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 24px rgba(0,0,0,.11);
+}
+
+.today {
+  outline: 2px solid #4f46e5;
+  outline-offset: -2px;
+}
+
+/* ── Header ──────────────────────────── */
+.header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.dayName {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.today .dayName {
+  color: #4f46e5;
+}
+
+.badge {
+  font-size: .65rem;
+  font-weight: 600;
+  background: #4f46e5;
+  color: #fff;
+  border-radius: 99px;
+  padding: 2px 8px;
+  line-height: 1.4;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dateStr {
+  font-size: .78rem;
+  color: #94a3b8;
+}
+
+.progress {
+  font-size: .75rem;
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Task List ───────────────────────── */
+.list {
+  list-style: none;
+  padding: 8px 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 56px;
+}
+
+.empty {
+  font-size: .8rem;
+  color: #cbd5e1;
+  text-align: center;
+  padding: 10px 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 6px;
+  border-radius: 8px;
+  transition: background .15s;
+}
+
+.item:hover {
+  background: #f8fafc;
+}
+
+.done {
+  background: #f8fafc;
+}
+
+/* Custom check button */
+.check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 2px solid #e2e8f0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-top: 2px;
+  transition: background .15s, border-color .15s;
+  color: #fff;
+}
+
+.check:hover {
+  border-color: #a5b4fc;
+}
+
+.checked {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.check svg {
+  width: 10px;
+  height: 10px;
+}
+
+.taskText {
+  flex: 1;
+  font-size: .875rem;
+  line-height: 1.45;
+  color: #1e293b;
+  word-break: break-word;
+  transition: color .15s;
+}
+
+.done .taskText {
+  color: #cbd5e1;
+  text-decoration: line-through;
+}
+
+.del {
+  opacity: 0;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 3px;
+  transition: color .15s, opacity .15s;
+  margin-top: 1px;
+}
+
+.item:hover .del {
+  opacity: 1;
+}
+
+.del:hover {
+  color: #f43f5e;
+}
+
+/* ── Add Form ────────────────────────── */
+.addForm {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.input {
+  flex: 1;
+  font-size: .85rem;
+  padding: 7px 11px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: border-color .15s, background .15s;
+  min-width: 0;
+}
+
+.input:focus {
+  border-color: #4f46e5;
+  background: #fff;
+}
+
+.input::placeholder {
+  color: #c8d0da;
+}
+
+.addBtn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: #4f46e5;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s, transform .1s;
+  padding: 0;
+}
+
+.addBtn:hover { background: #4338ca; }
+.addBtn:active { transform: scale(.92); }
+
+.addBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Mobile: show del button always ──── */
+@media (hover: none) {
+  .del { opacity: 1; }
+}
