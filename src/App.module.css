@@ -24,8 +24,40 @@
   font-size: .9rem;
 }
 
-.clearBtn {
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.shareBtn {
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1.5px solid #a5b4fc;
+  border-radius: 8px;
+  background: transparent;
+  color: #4f46e5;
+  font-size: .82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+.shareBtn:hover {
+  background: #eef2ff;
+}
+
+.loading {
+  text-align: center;
+  color: #94a3b8;
+  padding: 60px 0;
+  font-size: .95rem;
+}
+
+.clearBtn {
   display: inline-block;
   padding: 6px 16px;
   border: 1.5px solid #e2e8f0;
