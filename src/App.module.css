@@ -81,34 +81,42 @@
 }
 
 /* ── Board ─────────────────────────── */
-/* Desktop: 5 columns */
 .board {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
 }
 
-/* Tablet: 3 + 2 */
+.unscheduledRow {
+  margin-top: 16px;
+}
+
 @media (max-width: 960px) {
-  .board {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .board { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Phablet: 2 columns */
 @media (max-width: 600px) {
-  .board {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-  .app {
-    padding: 16px 12px 40px;
-  }
+  .board { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .unscheduledRow { margin-top: 12px; }
+  .app  { padding: 16px 12px 40px; }
 }
 
-/* Small phone: 1 column */
-@media (max-width: 360px) {
-  .board {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 380px) {
+  .board { grid-template-columns: 1fr; }
+}
+
+/* ── Drag Overlay ──────────────────── */
+.dragOverlay {
+  background: #fff;
+  border: 2px solid #4f46e5;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: .875rem;
+  color: #1e293b;
+  box-shadow: 0 8px 30px rgba(79,70,229,.25);
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
 }

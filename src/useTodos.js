@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { uid } from './utils';
 import { supabase } from './supabase';
 
-const EMPTY_WEEK = { 0: [], 1: [], 2: [], 3: [], 4: [] };
+const EMPTY_WEEK = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] };
 
 export function useTodos(roomId, weekId) {
   const [weekData, setWeekData] = useState(EMPTY_WEEK);
@@ -22,7 +22,7 @@ export function useTodos(roomId, weekId) {
       .maybeSingle()
       .then(({ data, error }) => {
         if (error) console.error('Load error:', error);
-        if (data?.data) setWeekData(data.data);
+        if (data?.data) setWeekData({ ...EMPTY_WEEK, ...data.data });
         setLoading(false);
       });
   }, [roomId, weekId]);
@@ -39,7 +39,7 @@ export function useTodos(roomId, weekId) {
         filter: `room_id=eq.${roomId}`,
       }, payload => {
         if (payload.new?.week_id === weekId) {
-          setWeekData(payload.new.data ?? EMPTY_WEEK);
+          setWeekData({ ...EMPTY_WEEK, ...(payload.new.data ?? {}) });
         }
       })
       .subscribe();
@@ -56,7 +56,6 @@ export function useTodos(roomId, weekId) {
       .then(({ error }) => { if (error) console.error('Save error:', error); });
   }, [roomId, weekId]);
 
-  // Use a ref so update always reads latest data — avoids calling save inside a state updater
   const update = useCallback((updater) => {
     const next = { ...EMPTY_WEEK, ...weekDataRef.current };
     updater(next);
@@ -80,9 +79,22 @@ export function useTodos(roomId, weekId) {
     update(w => { w[dayIdx] = (w[dayIdx] || []).map(t => t.id === taskId ? { ...t, text, note } : t); });
   }, [update]);
 
+  const moveTask = useCallback((fromDay, toDay, taskId) => {
+    const current = { ...EMPTY_WEEK, ...weekDataRef.current };
+    const task = (current[fromDay] || []).find(t => t.id === taskId);
+    if (!task) return;
+    const next = {
+      ...current,
+      [fromDay]: (current[fromDay] || []).filter(t => t.id !== taskId),
+      [toDay]: [...(current[toDay] || []), task],
+    };
+    setWeekData(next);
+    save(next);
+  }, [save]);
+
   const clearWeek = useCallback(() => {
-    update(w => { for (let i = 0; i < 5; i++) w[i] = []; });
+    update(w => { for (let i = 0; i <= 5; i++) w[i] = []; });
   }, [update]);
 
-  return { weekData, loading, addTask, toggleTask, deleteTask, editTask, clearWeek };
+  return { weekData, loading, addTask, toggleTask, deleteTask, editTask, moveTask, clearWeek };
 }

@@ -189,6 +189,12 @@
   background: #fff1f2;
 }
 
+.deleteBtnConfirm {
+  background: #f43f5e !important;
+  color: #fff !important;
+  border-color: #f43f5e !important;
+}
+
 .toggleBtn {
   border-radius: 8px;
   padding: 7px 14px;

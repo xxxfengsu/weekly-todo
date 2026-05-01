@@ -1,24 +1,17 @@
+import { useDroppable } from '@dnd-kit/core';
 import styles from './DayCard.module.css';
 import { isToday, DAYS } from './utils';
-
-const isTouch = window.matchMedia('(hover: none)').matches;
+import TaskItem from './TaskItem';
 
 export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpenDetail, onOpenAdd }) {
-  const today = isToday(date);
+  const isUnscheduled = dayIdx === 5;
+  const today = !isUnscheduled && date && isToday(date);
   const done = tasks.filter(t => t.done).length;
 
-  function makeDetailHandlers(task) {
-    if (isTouch) {
-      return { onClick: () => onOpenDetail(task, dayIdx) };
-    }
-    return {
-      onDoubleClick: () => onOpenDetail(task, dayIdx),
-      title: 'Double-click to view details',
-    };
-  }
+  const { setNodeRef, isOver } = useDroppable({ id: dayIdx });
 
   return (
-    <div className={`${styles.card} ${today ? styles.today : ''}`}>
+    <div className={`${styles.card} ${today ? styles.today : ''} ${isUnscheduled ? styles.unscheduled : ''}`}>
       <div className={styles.header}>
         <div className={styles.titleRow}>
           <span className={styles.dayName}>{DAYS[dayIdx]}</span>
@@ -31,37 +24,24 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
         )}
       </div>
 
-      <ul className={styles.list}>
+      <ul
+        ref={setNodeRef}
+        className={`${styles.list} ${isOver ? styles.dragOver : ''}`}
+      >
         {tasks.length === 0 && (
-          <li className={styles.empty}>No tasks yet</li>
+          <li className={styles.empty}>
+            {isOver ? 'Drop here' : 'No tasks yet'}
+          </li>
         )}
         {tasks.map(task => (
-          <li
+          <TaskItem
             key={task.id}
-            className={`${styles.item} ${task.done ? styles.done : ''}`}
-            {...makeDetailHandlers(task)}
-          >
-            <button
-              className={`${styles.check} ${task.done ? styles.checked : ''}`}
-              onClick={e => { e.stopPropagation(); onToggle(dayIdx, task.id); }}
-              aria-label={task.done ? 'Mark incomplete' : 'Mark complete'}
-            >
-              {task.done && (
-                <svg viewBox="0 0 12 12" fill="none">
-                  <polyline points="1.5,6 4.5,9.5 10.5,2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
-            </button>
-            <span className={styles.taskText}>
-              {task.text}
-              {task.note && <span className={styles.noteHint}> · note</span>}
-            </span>
-            <button
-              className={styles.del}
-              onClick={e => { e.stopPropagation(); onDelete(dayIdx, task.id); }}
-              aria-label="Delete"
-            >×</button>
-          </li>
+            task={task}
+            dayIdx={dayIdx}
+            onToggle={onToggle}
+            onDelete={onDelete}
+            onOpenDetail={onOpenDetail}
+          />
         ))}
       </ul>
 

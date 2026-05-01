@@ -38,8 +38,10 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
   const [text, setText] = useState(task?.text ?? '');
   const [note, setNote] = useState(task?.note ?? '');
   const [noteEditing, setNoteEditing] = useState(isAdd);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const textRef = useRef(null);
   const noteAreaRef = useRef(null);
+  const deleteTimerRef = useRef(null);
 
   useEffect(() => {
     if (isAdd) textRef.current?.focus();
@@ -64,6 +66,12 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
   }
 
   function handleDelete() {
+    if (!confirmingDelete) {
+      setConfirmingDelete(true);
+      clearTimeout(deleteTimerRef.current);
+      deleteTimerRef.current = setTimeout(() => setConfirmingDelete(false), 3000);
+      return;
+    }
     onDelete(dayIdx, task.id);
     onClose();
   }
@@ -112,7 +120,12 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
 
         <div className={styles.footer}>
           {!isAdd && (
-            <button className={styles.deleteBtn} onClick={handleDelete}>Delete</button>
+            <button
+              className={`${styles.deleteBtn} ${confirmingDelete ? styles.deleteBtnConfirm : ''}`}
+              onClick={handleDelete}
+            >
+              {confirmingDelete ? 'Sure?' : 'Delete'}
+            </button>
           )}
           {isAdd && <span />}
           <div className={styles.rightBtns}>

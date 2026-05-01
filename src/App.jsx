@@ -1,4 +1,8 @@
 import { useMemo, useState } from 'react';
+import {
+  DndContext, DragOverlay, closestCenter,
+  PointerSensor, TouchSensor, useSensor, useSensors,
+} from '@dnd-kit/core';
 import DayCard from './DayCard';
 import TaskModal from './TaskModal';
 import { getWeekDates, getWeekId } from './utils';
@@ -20,10 +24,28 @@ export default function App() {
   const dates = useMemo(() => getWeekDates(), []);
   const weekId = useMemo(() => getWeekId(dates[0]), [dates]);
   const roomId = useMemo(() => getRoomId(), []);
-  const { weekData, loading, addTask, toggleTask, deleteTask, editTask, clearWeek } = useTodos(roomId, weekId);
+  const { weekData, loading, addTask, toggleTask, deleteTask, editTask, moveTask, clearWeek } = useTodos(roomId, weekId);
   const [confirming, setConfirming] = useState(false);
   const [modal, setModal] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [activeDrag, setActiveDrag] = useState(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 8 } }),
+  );
+
+  function handleDragStart({ active }) {
+    setActiveDrag(active.data.current);
+  }
+
+  function handleDragEnd({ active, over }) {
+    setActiveDrag(null);
+    if (!over) return;
+    const { taskId, fromDay } = active.data.current;
+    const toDay = Number(over.id);
+    if (fromDay !== toDay) moveTask(fromDay, toDay, taskId);
+  }
 
   function handleClear() {
     if (!confirming) {
@@ -40,6 +62,8 @@ export default function App() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
+
+  const weekColumns = dates.map((date, idx) => ({ dayIdx: idx, date }));
 
   return (
     <div className={styles.app}>
@@ -62,20 +86,46 @@ export default function App() {
       {loading ? (
         <div className={styles.loading}>Loading…</div>
       ) : (
-        <main className={styles.board}>
-          {dates.map((date, idx) => (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <main className={styles.board}>
+            {weekColumns.map(({ dayIdx, date }) => (
+              <DayCard
+                key={dayIdx}
+                dayIdx={dayIdx}
+                date={date}
+                tasks={weekData[dayIdx] ?? []}
+                onToggle={toggleTask}
+                onDelete={deleteTask}
+                onOpenDetail={(task, di) => setModal({ task, dayIdx: di })}
+                onOpenAdd={(di) => setModal({ task: null, dayIdx: di })}
+              />
+            ))}
+          </main>
+
+          <div className={styles.unscheduledRow}>
             <DayCard
-              key={idx}
-              dayIdx={idx}
-              date={date}
-              tasks={weekData[idx] ?? []}
+              dayIdx={5}
+              date={null}
+              tasks={weekData[5] ?? []}
               onToggle={toggleTask}
               onDelete={deleteTask}
-              onOpenDetail={(task, dayIdx) => setModal({ task, dayIdx })}
-              onOpenAdd={(dayIdx) => setModal({ task: null, dayIdx })}
+              onOpenDetail={(task, di) => setModal({ task, dayIdx: di })}
+              onOpenAdd={(di) => setModal({ task: null, dayIdx: di })}
             />
-          ))}
-        </main>
+          </div>
+
+          <DragOverlay dropAnimation={null}>
+            {activeDrag && (() => {
+              const task = (weekData[activeDrag.fromDay] ?? []).find(t => t.id === activeDrag.taskId);
+              return task ? <div className={styles.dragOverlay}>{task.text}</div> : null;
+            })()}
+          </DragOverlay>
+        </DndContext>
       )}
 
       {modal && (
