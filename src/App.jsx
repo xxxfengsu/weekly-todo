@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import DayCard from './DayCard';
+import TaskModal from './TaskModal';
 import { getWeekDates, getWeekId } from './utils';
 import { useTodos } from './useTodos';
 import styles from './App.module.css';
@@ -7,8 +8,9 @@ import styles from './App.module.css';
 export default function App() {
   const dates = useMemo(() => getWeekDates(), []);
   const weekId = useMemo(() => getWeekId(dates[0]), [dates]);
-  const { weekData, addTask, toggleTask, deleteTask, clearWeek } = useTodos(weekId);
+  const { weekData, addTask, toggleTask, deleteTask, editTask, clearWeek } = useTodos(weekId);
   const [confirming, setConfirming] = useState(false);
+  const [detail, setDetail] = useState(null); // { task, dayIdx }
 
   function handleClear() {
     if (!confirming) {
@@ -43,9 +45,21 @@ export default function App() {
             onAdd={addTask}
             onToggle={toggleTask}
             onDelete={deleteTask}
+            onOpenDetail={(task, dayIdx) => setDetail({ task, dayIdx })}
           />
         ))}
       </main>
+
+      {detail && (
+        <TaskModal
+          task={detail.task}
+          dayIdx={detail.dayIdx}
+          onClose={() => setDetail(null)}
+          onSave={editTask}
+          onToggle={toggleTask}
+          onDelete={deleteTask}
+        />
+      )}
     </div>
   );
 }

@@ -150,6 +150,12 @@
   text-decoration: line-through;
 }
 
+.noteHint {
+  font-size: .75rem;
+  color: #a5b4fc;
+  font-weight: 400;
+}
+
 .del {
   opacity: 0;
   flex-shrink: 0;

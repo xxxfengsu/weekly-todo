@@ -48,11 +48,19 @@ export function useTodos(weekId) {
     });
   }, [update]);
 
+  const editTask = useCallback((dayIdx, taskId, text, note) => {
+    update(week => {
+      week[dayIdx] = (week[dayIdx] || []).map(t =>
+        t.id === taskId ? { ...t, text, note } : t
+      );
+    });
+  }, [update]);
+
   const clearWeek = useCallback(() => {
     update(week => {
       for (let i = 0; i < 5; i++) week[i] = [];
     });
   }, [update]);
 
-  return { weekData, addTask, toggleTask, deleteTask, clearWeek };
+  return { weekData, addTask, toggleTask, deleteTask, editTask, clearWeek };
 }

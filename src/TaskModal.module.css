@@ -1,0 +1,199 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+  animation: fadeIn .15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal {
+  background: #fff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp .18s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Header ───────────────────────── */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dayTag {
+  font-size: .8rem;
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+  border-radius: 99px;
+  padding: 3px 12px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: color .15s, background .15s;
+}
+
+.closeBtn:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+/* ── Body ─────────────────────────── */
+.body {
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-size: .75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.titleInput {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color .15s;
+}
+
+.titleInput:focus {
+  border-color: #4f46e5;
+}
+
+.noteInput {
+  font-size: .875rem;
+  color: #1e293b;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.6;
+  transition: border-color .15s;
+  min-height: 100px;
+}
+
+.noteInput:focus {
+  border-color: #4f46e5;
+}
+
+.noteInput::placeholder {
+  color: #c8d0da;
+}
+
+/* ── Footer ───────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 18px;
+  border-top: 1px solid #f1f5f9;
+  gap: 10px;
+}
+
+.rightBtns {
+  display: flex;
+  gap: 8px;
+}
+
+.deleteBtn {
+  background: none;
+  border: 1.5px solid #fca5a5;
+  color: #f43f5e;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: .82rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+}
+
+.deleteBtn:hover {
+  background: #fff1f2;
+}
+
+.toggleBtn {
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: .82rem;
+  cursor: pointer;
+  font-family: inherit;
+  border: 1.5px solid #e2e8f0;
+  background: none;
+  transition: background .15s, border-color .15s;
+}
+
+.toggleBtn.done {
+  color: #4f46e5;
+  border-color: #a5b4fc;
+}
+
+.toggleBtn.done:hover {
+  background: #eef2ff;
+}
+
+.toggleBtn.undone {
+  color: #64748b;
+}
+
+.toggleBtn.undone:hover {
+  background: #f8fafc;
+}
+
+.saveBtn {
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 20px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+}
+
+.saveBtn:hover {
+  background: #4338ca;
+}

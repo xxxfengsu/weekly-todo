@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import styles from './DayCard.module.css';
 import { isToday, DAYS } from './utils';
 
-export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete }) {
+export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete, onOpenDetail }) {
   const [text, setText] = useState('');
   const inputRef = useRef(null);
   const today = isToday(date);
@@ -37,7 +37,12 @@ export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete
           <li className={styles.empty}>暂无任务</li>
         )}
         {tasks.map(task => (
-          <li key={task.id} className={`${styles.item} ${task.done ? styles.done : ''}`}>
+          <li
+            key={task.id}
+            className={`${styles.item} ${task.done ? styles.done : ''}`}
+            onDoubleClick={() => onOpenDetail(task, dayIdx)}
+            title="双击查看详情"
+          >
             <button
               className={`${styles.check} ${task.done ? styles.checked : ''}`}
               onClick={() => onToggle(dayIdx, task.id)}
@@ -49,7 +54,10 @@ export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete
                 </svg>
               )}
             </button>
-            <span className={styles.taskText}>{task.text}</span>
+            <span className={styles.taskText}>
+              {task.text}
+              {task.note && <span className={styles.noteHint}> · 有备注</span>}
+            </span>
             <button
               className={styles.del}
               onClick={() => onDelete(dayIdx, task.id)}
