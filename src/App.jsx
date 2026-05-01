@@ -10,7 +10,8 @@ export default function App() {
   const weekId = useMemo(() => getWeekId(dates[0]), [dates]);
   const { weekData, addTask, toggleTask, deleteTask, editTask, clearWeek } = useTodos(weekId);
   const [confirming, setConfirming] = useState(false);
-  const [detail, setDetail] = useState(null); // { task, dayIdx }
+  // modal: null | { task: null (add) | task-object (edit), dayIdx }
+  const [modal, setModal] = useState(null);
 
   function handleClear() {
     if (!confirming) {
@@ -42,19 +43,20 @@ export default function App() {
             dayIdx={idx}
             date={date}
             tasks={weekData[idx] ?? []}
-            onAdd={addTask}
             onToggle={toggleTask}
             onDelete={deleteTask}
-            onOpenDetail={(task, dayIdx) => setDetail({ task, dayIdx })}
+            onOpenDetail={(task, dayIdx) => setModal({ task, dayIdx })}
+            onOpenAdd={(dayIdx) => setModal({ task: null, dayIdx })}
           />
         ))}
       </main>
 
-      {detail && (
+      {modal && (
         <TaskModal
-          task={detail.task}
-          dayIdx={detail.dayIdx}
-          onClose={() => setDetail(null)}
+          task={modal.task}
+          dayIdx={modal.dayIdx}
+          onClose={() => setModal(null)}
+          onAdd={addTask}
           onSave={editTask}
           onToggle={toggleTask}
           onDelete={deleteTask}

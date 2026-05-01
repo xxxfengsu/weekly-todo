@@ -2,20 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 import styles from './TaskModal.module.css';
 import { DAYS } from './utils';
 
-export default function TaskModal({ task, dayIdx, onClose, onSave, onToggle, onDelete }) {
-  const [text, setText] = useState(task.text);
-  const [note, setNote] = useState(task.note ?? '');
+// task=null → add mode, task=object → edit mode
+export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onToggle, onDelete }) {
+  const isAdd = task === null;
+  const [text, setText] = useState(task?.text ?? '');
+  const [note, setNote] = useState(task?.note ?? '');
   const textRef = useRef(null);
 
   useEffect(() => {
     textRef.current?.focus();
-    textRef.current?.select();
-  }, []);
+    if (!isAdd) textRef.current?.select();
+  }, [isAdd]);
 
   useEffect(() => {
-    function onKey(e) {
-      if (e.key === 'Escape') onClose();
-    }
+    function onKey(e) { if (e.key === 'Escape') onClose(); }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
@@ -23,7 +23,11 @@ export default function TaskModal({ task, dayIdx, onClose, onSave, onToggle, onD
   function handleSave() {
     const t = text.trim();
     if (!t) return;
-    onSave(dayIdx, task.id, t, note);
+    if (isAdd) {
+      onAdd(dayIdx, t, note);
+    } else {
+      onSave(dayIdx, task.id, t, note);
+    }
     onClose();
   }
 
@@ -48,6 +52,7 @@ export default function TaskModal({ task, dayIdx, onClose, onSave, onToggle, onD
             value={text}
             onChange={e => setText(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') handleSave(); }}
+            placeholder="输入任务名称…"
             maxLength={100}
           />
 
@@ -62,15 +67,22 @@ export default function TaskModal({ task, dayIdx, onClose, onSave, onToggle, onD
         </div>
 
         <div className={styles.footer}>
-          <button className={styles.deleteBtn} onClick={handleDelete}>删除</button>
+          {!isAdd && (
+            <button className={styles.deleteBtn} onClick={handleDelete}>删除</button>
+          )}
+          {isAdd && <span />}
           <div className={styles.rightBtns}>
-            <button
-              className={`${styles.toggleBtn} ${task.done ? styles.undone : styles.done}`}
-              onClick={() => { onToggle(dayIdx, task.id); onClose(); }}
-            >
-              {task.done ? '标记未完成' : '标记完成'}
+            {!isAdd && (
+              <button
+                className={`${styles.toggleBtn} ${task.done ? styles.undone : styles.done}`}
+                onClick={() => { onToggle(dayIdx, task.id); onClose(); }}
+              >
+                {task.done ? '标记未完成' : '标记完成'}
+              </button>
+            )}
+            <button className={styles.saveBtn} onClick={handleSave}>
+              {isAdd ? '添加' : '保存'}
             </button>
-            <button className={styles.saveBtn} onClick={handleSave}>保存</button>
           </div>
         </div>
       </div>

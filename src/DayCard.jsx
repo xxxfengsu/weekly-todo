@@ -1,21 +1,8 @@
-import { useState, useRef } from 'react';
 import styles from './DayCard.module.css';
 import { isToday, DAYS } from './utils';
 
-export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete, onOpenDetail }) {
-  const [text, setText] = useState('');
-  const inputRef = useRef(null);
+export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpenDetail, onOpenAdd }) {
   const today = isToday(date);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const t = text.trim();
-    if (!t) return;
-    onAdd(dayIdx, t);
-    setText('');
-    inputRef.current?.focus();
-  }
-
   const done = tasks.filter(t => t.done).length;
 
   return (
@@ -67,22 +54,15 @@ export default function DayCard({ dayIdx, date, tasks, onAdd, onToggle, onDelete
         ))}
       </ul>
 
-      <form className={styles.addForm} onSubmit={handleSubmit}>
-        <input
-          ref={inputRef}
-          className={styles.input}
-          value={text}
-          onChange={e => setText(e.target.value)}
-          placeholder="添加任务…"
-          maxLength={100}
-        />
-        <button className={styles.addBtn} type="submit" aria-label="添加">
+      <div className={styles.addArea}>
+        <button className={styles.addBtn} onClick={() => onOpenAdd(dayIdx)}>
           <svg viewBox="0 0 16 16" fill="none">
             <line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
             <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
           </svg>
+          添加任务
         </button>
-      </form>
+      </div>
     </div>
   );
 }

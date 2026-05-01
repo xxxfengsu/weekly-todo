@@ -28,9 +28,9 @@ export function useTodos(weekId) {
     });
   }, [weekId]);
 
-  const addTask = useCallback((dayIdx, text) => {
+  const addTask = useCallback((dayIdx, text, note = '') => {
     update(week => {
-      week[dayIdx] = [...(week[dayIdx] || []), { id: uid(), text, done: false }];
+      week[dayIdx] = [...(week[dayIdx] || []), { id: uid(), text, note, done: false }];
     });
   }, [update]);
 

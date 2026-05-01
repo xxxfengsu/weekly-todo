@@ -178,58 +178,39 @@
   color: #f43f5e;
 }
 
-/* ── Add Form ────────────────────────── */
-.addForm {
-  display: flex;
-  gap: 6px;
+/* ── Add Button ──────────────────────── */
+.addArea {
   padding: 8px 12px 12px;
   border-top: 1px solid #f1f5f9;
 }
 
-.input {
-  flex: 1;
-  font-size: .85rem;
-  padding: 7px 11px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 8px;
-  outline: none;
-  color: #1e293b;
-  background: #f8fafc;
-  transition: border-color .15s, background .15s;
-  min-width: 0;
-}
-
-.input:focus {
-  border-color: #4f46e5;
-  background: #fff;
-}
-
-.input::placeholder {
-  color: #c8d0da;
-}
-
 .addBtn {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  background: #4f46e5;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .15s, transform .1s;
-  padding: 0;
+  gap: 6px;
+  background: none;
+  border: 1.5px dashed #e2e8f0;
+  border-radius: 10px;
+  color: #94a3b8;
+  font-size: .85rem;
+  font-family: inherit;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
 }
 
-.addBtn:hover { background: #4338ca; }
-.addBtn:active { transform: scale(.92); }
+.addBtn:hover {
+  border-color: #a5b4fc;
+  color: #4f46e5;
+  background: #f5f3ff;
+}
 
 .addBtn svg {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
 }
 
 /* ── Mobile: show del button always ──── */
