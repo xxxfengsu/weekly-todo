@@ -41,34 +41,34 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
       <div className={styles.modal} role="dialog" aria-modal="true">
         <div className={styles.modalHeader}>
           <span className={styles.dayTag}>{DAYS[dayIdx]}</span>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="关闭">×</button>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">×</button>
         </div>
 
         <div className={styles.body}>
-          <label className={styles.label}>任务</label>
+          <label className={styles.label}>Task</label>
           <input
             ref={textRef}
             className={styles.titleInput}
             value={text}
             onChange={e => setText(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') handleSave(); }}
-            placeholder="输入任务名称…"
+            placeholder="Enter task name…"
             maxLength={100}
           />
 
-          <label className={styles.label}>备注</label>
+          <label className={styles.label}>Notes</label>
           <textarea
             className={styles.noteInput}
             value={note}
             onChange={e => setNote(e.target.value)}
-            placeholder="添加备注…"
+            placeholder="Add notes…"
             rows={5}
           />
         </div>
 
         <div className={styles.footer}>
           {!isAdd && (
-            <button className={styles.deleteBtn} onClick={handleDelete}>删除</button>
+            <button className={styles.deleteBtn} onClick={handleDelete}>Delete</button>
           )}
           {isAdd && <span />}
           <div className={styles.rightBtns}>
@@ -77,11 +77,11 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
                 className={`${styles.toggleBtn} ${task.done ? styles.undone : styles.done}`}
                 onClick={() => { onToggle(dayIdx, task.id); onClose(); }}
               >
-                {task.done ? '标记未完成' : '标记完成'}
+                {task.done ? 'Mark Incomplete' : 'Mark Complete'}
               </button>
             )}
             <button className={styles.saveBtn} onClick={handleSave}>
-              {isAdd ? '添加' : '保存'}
+              {isAdd ? 'Add' : 'Save'}
             </button>
           </div>
         </div>

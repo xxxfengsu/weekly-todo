@@ -26,13 +26,13 @@ export default function App() {
   return (
     <div className={styles.app}>
       <header className={styles.header}>
-        <h1 className={styles.title}>每周计划</h1>
+        <h1 className={styles.title}>Weekly Planner</h1>
         <p className={styles.sub}>{weekId}</p>
         <button
           className={`${styles.clearBtn} ${confirming ? styles.confirm : ''}`}
           onClick={handleClear}
         >
-          {confirming ? '再次点击确认清除' : '清除本周任务'}
+          {confirming ? 'Confirm Clear' : 'Clear This Week'}
         </button>
       </header>
 

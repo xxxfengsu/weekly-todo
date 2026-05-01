@@ -1,4 +1,4 @@
-export const DAYS = ['周一', '周二', '周三', '周四', '周五'];
+export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
 export function getWeekDates() {
   const now = new Date();

@@ -10,7 +10,7 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
       <div className={styles.header}>
         <div className={styles.titleRow}>
           <span className={styles.dayName}>{DAYS[dayIdx]}</span>
-          {today && <span className={styles.badge}>今天</span>}
+          {today && <span className={styles.badge}>Today</span>}
         </div>
         {tasks.length > 0 && (
           <div className={styles.meta}>
@@ -21,19 +21,19 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
 
       <ul className={styles.list}>
         {tasks.length === 0 && (
-          <li className={styles.empty}>暂无任务</li>
+          <li className={styles.empty}>No tasks yet</li>
         )}
         {tasks.map(task => (
           <li
             key={task.id}
             className={`${styles.item} ${task.done ? styles.done : ''}`}
             onDoubleClick={() => onOpenDetail(task, dayIdx)}
-            title="双击查看详情"
+            title="Double-click to view details"
           >
             <button
               className={`${styles.check} ${task.done ? styles.checked : ''}`}
               onClick={() => onToggle(dayIdx, task.id)}
-              aria-label={task.done ? '标记未完成' : '标记完成'}
+              aria-label={task.done ? 'Mark incomplete' : 'Mark complete'}
             >
               {task.done && (
                 <svg viewBox="0 0 12 12" fill="none">
@@ -43,12 +43,12 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
             </button>
             <span className={styles.taskText}>
               {task.text}
-              {task.note && <span className={styles.noteHint}> · 有备注</span>}
+              {task.note && <span className={styles.noteHint}> · note</span>}
             </span>
             <button
               className={styles.del}
               onClick={() => onDelete(dayIdx, task.id)}
-              aria-label="删除"
+              aria-label="Delete"
             >×</button>
           </li>
         ))}
@@ -60,7 +60,7 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
             <line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
             <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
           </svg>
-          添加任务
+          Add task
         </button>
       </div>
     </div>
