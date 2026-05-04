@@ -39,6 +39,7 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
   const [note, setNote] = useState(task?.note ?? '');
   const [noteEditing, setNoteEditing] = useState(isAdd);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [dupError, setDupError] = useState(false);
   const textRef = useRef(null);
   const noteAreaRef = useRef(null);
   const deleteTimerRef = useRef(null);
@@ -60,8 +61,11 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
   function handleSave() {
     const t = text.trim();
     if (!t) return;
-    if (isAdd) onAdd(dayIdx, t, note);
-    else onSave(dayIdx, task.id, t, note);
+    if (isAdd) {
+      if (onAdd(dayIdx, t, note) === false) { setDupError(true); return; }
+    } else {
+      onSave(dayIdx, task.id, t, note);
+    }
     onClose();
   }
 
@@ -90,11 +94,12 @@ export default function TaskModal({ task, dayIdx, onClose, onAdd, onSave, onTogg
             ref={textRef}
             className={styles.titleInput}
             value={text}
-            onChange={e => setText(e.target.value)}
+            onChange={e => { setText(e.target.value); setDupError(false); }}
             onKeyDown={e => { if (e.key === 'Enter') handleSave(); }}
             placeholder="Enter task name…"
             maxLength={100}
           />
+          {dupError && <p className={styles.dupError}>任务名称已存在，请换一个名字</p>}
 
           <label className={styles.label}>Notes</label>
 

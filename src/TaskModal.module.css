@@ -239,3 +239,9 @@
 .saveBtn:hover {
   background: #4338ca;
 }
+
+.dupError {
+  font-size: .8rem;
+  color: #f43f5e;
+  margin: 0;
+}

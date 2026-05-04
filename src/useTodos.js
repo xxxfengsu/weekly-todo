@@ -66,6 +66,10 @@ export function useTodos(roomId) {
   }, [roomId]);
 
   const addTask = useCallback((dayIdx, text, note = '') => {
+    const lower = text.trim().toLowerCase();
+    const duplicate = Object.values(rowsRef.current).some(r => r.text.trim().toLowerCase() === lower);
+    if (duplicate) return false;
+
     const id = uid();
     const now = new Date().toISOString();
     const row = { id, room_id: roomId, day_idx: dayIdx, text, note, done: false, created_at: now, updated_at: now };
@@ -74,6 +78,7 @@ export function useTodos(roomId) {
     supabase.from('tasks').insert(row).then(({ error }) => {
       if (error) { console.error('Insert error:', error); delete rowsRef.current[id]; applyRows(); }
     });
+    return true;
   }, [roomId]);
 
   const toggleTask = useCallback((dayIdx, taskId) => {
