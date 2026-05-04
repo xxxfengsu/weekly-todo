@@ -5,7 +5,7 @@ import {
 } from '@dnd-kit/core';
 import DayCard from './DayCard';
 import TaskModal from './TaskModal';
-import { getWeekDates, getWeekId } from './utils';
+import { getWeekDates } from './utils';
 import { useTodos } from './useTodos';
 import styles from './App.module.css';
 
@@ -22,9 +22,8 @@ function getRoomId() {
 
 export default function App() {
   const dates = useMemo(() => getWeekDates(), []);
-  const weekId = useMemo(() => getWeekId(dates[0]), [dates]);
   const roomId = useMemo(() => getRoomId(), []);
-  const { weekData, loading, addTask, toggleTask, deleteTask, editTask, moveTask, clearWeek } = useTodos(roomId, weekId);
+  const { weekData, loading, addTask, toggleTask, deleteTask, editTask, moveTask, clearAll } = useTodos(roomId);
   const [confirming, setConfirming] = useState(false);
   const [modal, setModal] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -53,7 +52,7 @@ export default function App() {
       setTimeout(() => setConfirming(false), 3000);
       return;
     }
-    clearWeek();
+    clearAll();
     setConfirming(false);
   }
 
@@ -69,7 +68,6 @@ export default function App() {
     <div className={styles.app}>
       <header className={styles.header}>
         <h1 className={styles.title}>Weekly Planner</h1>
-        <p className={styles.sub}>{weekId}</p>
         <div className={styles.actions}>
           <button className={styles.shareBtn} onClick={handleCopyLink}>
             {copied ? '✓ Copied!' : 'Share Link'}
