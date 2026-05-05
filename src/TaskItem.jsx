@@ -24,7 +24,10 @@ function renderText(text) {
   return parts.length ? parts : text;
 }
 
-export default function TaskItem({ task, dayIdx, onToggle, onDelete, onOpenDetail }) {
+const HAS_OUT_RE = /\bOUT\b/;
+
+export default function TaskItem({ task, dayIdx, onToggle, onPack, onDelete, onOpenDetail }) {
+  const isOutTask = HAS_OUT_RE.test(task.text);
   const [confirming, setConfirming] = useState(false);
   const timerRef = useRef(null);
 
@@ -81,6 +84,20 @@ export default function TaskItem({ task, dayIdx, onToggle, onDelete, onOpenDetai
         {renderText(task.text)}
         {task.note && <span className={styles.noteHint}> · note</span>}
       </span>
+      {isOutTask && (
+        <button
+          className={`${styles.pack} ${task.packed ? styles.packActive : ''}`}
+          onClick={e => { e.stopPropagation(); onPack(dayIdx, task.id); }}
+          title={task.packed ? 'Unpack' : 'Pack'}
+          aria-label={task.packed ? 'Unpack' : 'Pack'}
+        >
+          <svg viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="5" width="14" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.6"/>
+            <path d="M1 5l2-4h10l2 4" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+            <path d="M6 5v2.5a2 2 0 004 0V5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+          </svg>
+        </button>
+      )}
       <button
         className={`${styles.del} ${confirming ? styles.delConfirm : ''}`}
         onClick={handleDelete}

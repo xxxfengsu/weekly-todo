@@ -203,6 +203,38 @@
   line-height: 1.6;
 }
 
+.pack {
+  opacity: 0;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 0 2px;
+  margin-top: 2px;
+  transition: color .15s, opacity .15s;
+  display: flex;
+  align-items: center;
+}
+
+.pack svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pack:hover {
+  color: #f59e0b;
+}
+
+.packActive {
+  opacity: 1 !important;
+  color: #f59e0b !important;
+}
+
+.item:hover .pack {
+  opacity: 1;
+}
+
 .del {
   opacity: 0;
   flex-shrink: 0;
@@ -269,4 +301,5 @@
 /* ── Mobile ──────────────────────────── */
 @media (hover: none) {
   .del { opacity: 1; }
+  .pack { opacity: 1; }
 }
