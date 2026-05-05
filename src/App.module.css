@@ -33,6 +33,23 @@
   flex-wrap: wrap;
 }
 
+.exportBtn {
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1.5px solid #6ee7b7;
+  border-radius: 8px;
+  background: transparent;
+  color: #059669;
+  font-size: .82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+.exportBtn:hover {
+  background: #ecfdf5;
+}
+
 .shareBtn {
   display: inline-block;
   padding: 6px 16px;
