@@ -3,7 +3,7 @@ import styles from './DayCard.module.css';
 import { isToday, DAYS } from './utils';
 import TaskItem from './TaskItem';
 
-export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpenDetail, onOpenAdd }) {
+export default function DayCard({ dayIdx, date, tasks, onToggle, onPack, onDelete, onOpenDetail, onOpenAdd }) {
   const isUnscheduled = dayIdx === 5;
   const today = !isUnscheduled && date && isToday(date);
   const done = tasks.filter(t => t.done).length;
@@ -40,6 +40,7 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onDelete, onOpe
             task={task}
             dayIdx={dayIdx}
             onToggle={onToggle}
+            onPack={onPack}
             onDelete={onDelete}
             onOpenDetail={onOpenDetail}
           />

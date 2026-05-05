@@ -23,7 +23,7 @@ function getRoomId() {
 export default function App() {
   const dates = useMemo(() => getWeekDates(), []);
   const roomId = useMemo(() => getRoomId(), []);
-  const { weekData, loading, addTask, toggleTask, deleteTask, editTask, moveTask, clearAll } = useTodos(roomId);
+  const { weekData, loading, addTask, toggleTask, packTask, deleteTask, editTask, moveTask, clearAll } = useTodos(roomId);
   const [confirming, setConfirming] = useState(false);
   const [modal, setModal] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -98,6 +98,7 @@ export default function App() {
                 date={date}
                 tasks={weekData[dayIdx] ?? []}
                 onToggle={toggleTask}
+                onPack={packTask}
                 onDelete={deleteTask}
                 onOpenDetail={(task, di) => setModal({ task, dayIdx: di })}
                 onOpenAdd={(di) => setModal({ task: null, dayIdx: di })}

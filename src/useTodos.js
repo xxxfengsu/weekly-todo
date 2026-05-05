@@ -12,7 +12,7 @@ function buildWeekData(rowMap) {
   for (const row of rows) {
     const d = row.day_idx;
     if (week[d] !== undefined) {
-      week[d] = [...week[d], { id: row.id, text: row.text, note: row.note, done: row.done }];
+      week[d] = [...week[d], { id: row.id, text: row.text, note: row.note, done: row.done, packed: row.packed ?? false }];
     }
   }
   return week;
@@ -72,7 +72,7 @@ export function useTodos(roomId) {
 
     const id = uid();
     const now = new Date().toISOString();
-    const row = { id, room_id: roomId, day_idx: dayIdx, text, note, done: false, created_at: now, updated_at: now };
+    const row = { id, room_id: roomId, day_idx: dayIdx, text, note, done: false, packed: false, created_at: now, updated_at: now };
     rowsRef.current[id] = row;
     applyRows();
     supabase.from('tasks').insert(row).then(({ error }) => {
@@ -109,6 +109,16 @@ export function useTodos(roomId) {
       .then(({ error }) => { if (error) { rowsRef.current[taskId] = row; applyRows(); } });
   }, []);
 
+  const packTask = useCallback((dayIdx, taskId) => {
+    const row = rowsRef.current[taskId];
+    if (!row) return;
+    const updated = { ...row, packed: !row.packed, updated_at: new Date().toISOString() };
+    rowsRef.current[taskId] = updated;
+    applyRows();
+    supabase.from('tasks').update({ packed: updated.packed, updated_at: updated.updated_at }).eq('id', taskId)
+      .then(({ error }) => { if (error) { rowsRef.current[taskId] = row; applyRows(); } });
+  }, []);
+
   const moveTask = useCallback((fromDay, toDay, taskId) => {
     const row = rowsRef.current[taskId];
     if (!row) return;
@@ -120,11 +130,14 @@ export function useTodos(roomId) {
   }, []);
 
   const clearAll = useCallback(() => {
-    rowsRef.current = {};
-    setWeekData(EMPTY_WEEK);
-    supabase.from('tasks').delete().eq('room_id', roomId)
+    const unscheduled = Object.fromEntries(
+      Object.entries(rowsRef.current).filter(([, row]) => row.day_idx === 5)
+    );
+    rowsRef.current = unscheduled;
+    applyRows();
+    supabase.from('tasks').delete().eq('room_id', roomId).in('day_idx', [0, 1, 2, 3, 4])
       .then(({ error }) => { if (error) console.error('Clear error:', error); });
   }, [roomId]);
 
-  return { weekData, loading, addTask, toggleTask, deleteTask, editTask, moveTask, clearAll };
+  return { weekData, loading, addTask, toggleTask, packTask, deleteTask, editTask, moveTask, clearAll };
 }
