@@ -4,9 +4,15 @@ import { CSS } from '@dnd-kit/utilities';
 import styles from './DayCard.module.css';
 
 const isTouch = window.matchMedia('(hover: none)').matches;
-const TAG_RE = /\b(IN|OUT)\b/g;
+const TAG_RE = /\bIN\b|\bOUT\b|WO/g;
 
-function renderText(text) {
+function tagClass(tag, styles) {
+  if (tag === 'IN') return styles.tagIn;
+  if (tag === 'OUT') return styles.tagOut;
+  return styles.tagWo;
+}
+
+function renderText(text, styles) {
   const parts = [];
   let last = 0;
   let match;
@@ -14,7 +20,7 @@ function renderText(text) {
   while ((match = TAG_RE.exec(text)) !== null) {
     if (match.index > last) parts.push(<span key={last}>{text.slice(last, match.index)}</span>);
     parts.push(
-      <span key={match.index} className={match[0] === 'IN' ? styles.tagIn : styles.tagOut}>
+      <span key={match.index} className={tagClass(match[0], styles)}>
         {match[0]}
       </span>
     );
@@ -81,7 +87,7 @@ export default function TaskItem({ task, dayIdx, onToggle, onPack, onDelete, onO
         )}
       </button>
       <span className={styles.taskText}>
-        {renderText(task.text)}
+        {renderText(task.text, styles)}
         {task.note && <span className={styles.noteHint}> · note</span>}
       </span>
       {isOutTask && (
