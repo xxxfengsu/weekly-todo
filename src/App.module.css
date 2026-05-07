@@ -108,6 +108,10 @@
   margin-top: 16px;
 }
 
+.workOrdersRow {
+  margin-top: 16px;
+}
+
 @media (max-width: 960px) {
   .board { grid-template-columns: repeat(3, 1fr); }
 }
@@ -115,6 +119,7 @@
 @media (max-width: 600px) {
   .board { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .unscheduledRow { margin-top: 12px; }
+  .workOrdersRow { margin-top: 12px; }
   .app  { padding: 16px 12px 40px; }
 }
 

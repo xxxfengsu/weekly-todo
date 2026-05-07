@@ -5,7 +5,8 @@ import TaskItem from './TaskItem';
 
 export default function DayCard({ dayIdx, date, tasks, onToggle, onPack, onDelete, onOpenDetail, onOpenAdd }) {
   const isUnscheduled = dayIdx === 5;
-  const today = !isUnscheduled && date && isToday(date);
+  const isWorkOrders = dayIdx === 6;
+  const today = !isUnscheduled && !isWorkOrders && date && isToday(date);
   const done = tasks.filter(t => t.done).length;
 
   // Apply droppable to the entire card so the hit area is always large
@@ -14,7 +15,7 @@ export default function DayCard({ dayIdx, date, tasks, onToggle, onPack, onDelet
   return (
     <div
       ref={setNodeRef}
-      className={`${styles.card} ${today ? styles.today : ''} ${isUnscheduled ? styles.unscheduled : ''} ${isOver ? styles.cardOver : ''}`}
+      className={`${styles.card} ${today ? styles.today : ''} ${isUnscheduled ? styles.unscheduled : ''} ${isWorkOrders ? styles.workOrders : ''} ${isOver ? styles.cardOver : ''}`}
     >
       <div className={styles.header}>
         <div className={styles.titleRow}>

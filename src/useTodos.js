@@ -2,10 +2,10 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { uid } from './utils';
 import { supabase } from './supabase';
 
-const EMPTY_WEEK = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] };
+const EMPTY_WEEK = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
 
 function buildWeekData(rowMap) {
-  const week = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] };
+  const week = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
   const rows = Object.values(rowMap).sort(
     (a, b) => new Date(a.created_at) - new Date(b.created_at)
   );
