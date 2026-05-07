@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__chrome-devtools__list_pages",
+      "mcp__chrome-devtools__select_page",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__press_key",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__new_page",
+      "mcp__slack__slack_get_channel_history",
+      "Bash(Get-ChildItem -Path \"D:\\\\codes\\\\weekly-todo\" -Recurse -Depth 2)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Format-Table -AutoSize)",
+      "mcp__chrome-devtools__navigate_page",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh pr *)"
+    ]
+  }
+}
