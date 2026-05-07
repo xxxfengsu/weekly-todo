@@ -1,4 +1,4 @@
-export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Unscheduled'];
+export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Unscheduled', 'Special Tasks'];
 
 export function getWeekDates() {
   const now = new Date();

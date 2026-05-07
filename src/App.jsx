@@ -328,6 +328,18 @@ export default function App() {
             />
           </div>
 
+          <div className={styles.workOrdersRow}>
+            <DayCard
+              dayIdx={6}
+              date={null}
+              tasks={weekData[6] ?? []}
+              onToggle={toggleTask}
+              onDelete={deleteTask}
+              onOpenDetail={(task, di) => setModal({ task, dayIdx: di })}
+              onOpenAdd={(di) => setModal({ task: null, dayIdx: di })}
+            />
+          </div>
+
           <DragOverlay dropAnimation={null}>
             {activeDrag && (() => {
               const task = (weekData[activeDrag.fromDay] ?? []).find(t => t.id === activeDrag.taskId);
